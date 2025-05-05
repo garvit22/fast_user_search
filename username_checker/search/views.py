@@ -5,6 +5,7 @@ def check_username(request):
     username = request.GET.get("username")
     if not username:
         return JsonResponse({"error": "Username is required"}, status=400)
+    print('test')
 
     cached = is_username_cached(username)
     if cached is not None:
