@@ -14,3 +14,4 @@ def check_username(request):
     taken = get_username_from_db(username)
     cache_username(username, taken)
     return JsonResponse({"username": username, "taken": taken, "from": "db"})
+

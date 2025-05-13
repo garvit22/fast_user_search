@@ -1,0 +1,60 @@
+# Redis Data Inspection Reference Guide
+
+## Viewing All Keys and Values in Redis
+
+### Step 1: Access the Redis Container Shell
+Connect to your Redis container's bash terminal:
+
+```bash
+docker exec -it redis_quicksearch bash
+```
+
+### Step 2: View Keys and Their Values
+Once inside the container, run this command to display all keys with their values:
+
+```bash
+redis-cli -n 1 KEYS ":1:user:*" | while read key; do
+  value=$(redis-cli -n 1 GET "$key")
+  echo "Key: $key | Value: $value"
+done
+```
+
+### Parameters Explained
+- `redis-cli`: The Redis command line interface
+- `-n 1`: Selects database 1 (Redis has multiple databases, numbered 0-15 by default)
+- `KEYS ":1:user:*"`: Lists all keys matching the pattern ":1:user:*"
+- `while read key; do ... done`: Processes each key in a loop
+- `$(redis-cli -n 1 GET "$key")`: Gets the value for each key
+
+## Additional Useful Commands
+
+### View All Keys in Any Database
+```bash
+redis-cli -n 1 KEYS "*"
+```
+
+### Check Key Type
+```bash
+redis-cli -n 1 TYPE "keyname"
+```
+
+### View Specific Data Types
+For Hash type data:
+```bash
+redis-cli -n 1 HGETALL "keyname"
+```
+
+For List type data:
+```bash
+redis-cli -n 1 LRANGE "keyname" 0 -1
+```
+
+### Get Database Statistics
+```bash
+redis-cli INFO keyspace
+```
+
+## Pattern Matching Examples
+- `:1:user:*` - All user keys
+- `*profile*` - All keys containing "profile"
+- `:1:session:*` - All session keys
